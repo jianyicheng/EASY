@@ -21,7 +21,7 @@ if ! grep -q "add_subdirectory(easy)" $LEGUP/llvm/lib/Transforms/CMakeLists.txt;
 fi
 ```
 
-Build LegUp
+Build LegUp:
 ```
 cd $LEGUP
 make
@@ -29,7 +29,7 @@ make
 
 ## Test Examples
 
-You can use `quick_start.sh` to play with existing examples:
+You can use `quick_start.sh` to play with the existing examples:
 
 ```
 # bash quick_start.sh $NUM_PARTITION $BENCHMARK_NAME
