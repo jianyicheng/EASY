@@ -1,0 +1,39 @@
+sed -i s/%/$/g `grep % -rl --include="op.bpl" ./`
+sed -i s/@/$/g `grep @ -rl --include="op.bpl" ./`
+
+echo "*******************************************************"
+echo "                 Boogie Code Test"
+echo "*******************************************************"
+
+rm linenum.txt
+rm iteration_buffer.txt
+
+~/boogie/Binaries/boogie op.bpl > iteration_buffer.txt
+grep -F "This assertion might not hold." iteration_buffer.txt
+
+grep -Po 'op.bpl\(\K.*?(?=,2\): Error BP5001: This assertion might not hold..*)' iteration_buffer.txt > linenum.txt
+
+
+while true; do
+   sed 's/.*/&d/' linenum.txt | sed -i -f - op.bpl
+ #  echo "Failed Assertion found."
+   ~/boogie/Binaries/boogie op.bpl > iteration_buffer.txt
+   
+   grep -F "This assertion might not hold." iteration_buffer.txt
+   grep -Po 'op.bpl\(\K.*?(?=,2\): Error BP5001: This assertion might not hold..*)' iteration_buffer.txt > linenum.txt
+  # code if not found
+  #  echo "Boogie executed success."
+   if grep -F "Boogie program verifier finished with 1 verified, 0 errors" iteration_buffer.txt;
+then
+	echo "Boogie Generation finished"
+	break
+   fi   
+done
+
+rm linenum.txt
+rm iteration_buffer.txt
+
+echo "Extracting data..."
+
+python extract_boogie.py
+
