@@ -8,7 +8,7 @@ echo "*******************************************************"
 rm linenum.txt
 rm iteration_buffer.txt
 
-boogie op.bpl > iteration_buffer.txt
+boogie/Binaries/boogie op.bpl > iteration_buffer.txt
 grep -F "This assertion might not hold." iteration_buffer.txt
 
 grep -Po 'op.bpl\(\K.*?(?=,2\): Error BP5001: This assertion might not hold..*)' iteration_buffer.txt > linenum.txt
@@ -17,7 +17,7 @@ grep -Po 'op.bpl\(\K.*?(?=,2\): Error BP5001: This assertion might not hold..*)'
 while true; do
    sed 's/.*/&d/' linenum.txt | sed -i -f - op.bpl
  #  echo "Failed Assertion found."
-   boogie op.bpl > iteration_buffer.txt
+   boogie/Binaries/boogie op.bpl > iteration_buffer.txt
    
    grep -F "This assertion might not hold." iteration_buffer.txt
    grep -Po 'op.bpl\(\K.*?(?=,2\): Error BP5001: This assertion might not hold..*)' iteration_buffer.txt > linenum.txt
